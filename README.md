@@ -139,76 +139,81 @@ Each module follows a RESTful structure under `/api/v1` and `/api/v2`.
 
 ## 5. Validation and Error Handling
 
-Validation is handled via Form Requests (App\Http\Requests).
+Validation is handled via **Form Requests** (`App\Http\Requests`), ensuring clean and centralized input validation.
 
-Common HTTP Response Codes:
+### Common HTTP Response Codes
+| Code | Meaning |
+|------|----------|
+| **200** | Success |
+| **201** | Resource created |
+| **404** | Not found |
+| **422** | Validation error |
+| **500** | Internal server error |
 
-200 – Success
+All API responses follow a **standardized JSON format**, ensuring consistent success and error handling across all controllers.
 
-201 – Resource created
-
-404 – Not found
-
-422 – Validation error
-
-500 – Internal server error
-
-Responses are standardized across controllers with uniform JSON structures.
+---
 
 ## 6. Security Practices
 
-Passwords are hashed using Laravel’s Hash::make().
+- Passwords are securely hashed using Laravel’s `Hash::make()`.  
+- All input is validated for **type, format, and constraints**.  
+- **CSRF** and **signature validation** are enforced via Laravel middleware.  
+- The architecture is **future-ready** for integration with **Laravel Sanctum** or **Passport** authentication.
 
-All input is validated for type, format, and constraints.
-
-CSRF and signature validation are enforced via Laravel middleware.
-
-Future-ready for Laravel Sanctum or Passport authentication integration.
+---
 
 ## 7. Scalability and Maintainability
 
-Versioned APIs: Supports /v1 and /v2 routes for incremental upgrades.
+- **Versioned APIs:** Supports `/v1` and `/v2` routes for structured evolution and backward compatibility.  
+- **Pagination:** Implemented in all list endpoints via Eloquent’s `paginate()` for efficient large data handling.  
+- **Loose Coupling:** Repositories are bound to interfaces through service providers, maintaining clean dependency inversion.  
+- **Migrations:** Database schema versioning and evolution handled seamlessly via artisan commands.
 
-Pagination: Implemented in all list endpoints via Eloquent’s paginate().
-
-Loose Coupling: Repositories are bound to interfaces through service providers.
-
-Migrations: Database schema versioning and evolution handled via artisan commands.
+---
 
 ## 8. Database Schema
-Users
-Field	Type	Description
-id	integer	Primary key
-username	string	User’s name
-email	string	Unique email address
-password	string	Hashed password
-Tasks
-Field	Type	Description
-id	integer	Primary key
-user_id	integer	Foreign key reference
-title	string	Task title
-priority	enum	low / medium / high
-status	boolean	Completion flag
-due	date	Task due date
-ActivityLogger
-Field	Type	Description
-id	integer	Primary key
-user_id	integer	User performing the action
-task_id	integer	Affected task
-action	string	Performed action
-created_at	timestamp	Log creation time
+
+### Users
+| Field | Type | Description |
+|-------|------|--------------|
+| id | integer | Primary key |
+| username | string | User’s name |
+| email | string | Unique email address |
+| password | string | Hashed password |
+
+### Tasks
+| Field | Type | Description |
+|-------|------|--------------|
+| id | integer | Primary key |
+| user_id | integer | Foreign key reference to users |
+| title | string | Task title |
+| priority | enum | low / medium / high |
+| status | boolean | Completion flag |
+| due | date | Task due date |
+
+### ActivityLogger
+| Field | Type | Description |
+|-------|------|--------------|
+| id | integer | Primary key |
+| user_id | integer | User performing the action |
+| task_id | integer | Affected task |
+| action | string | Performed action |
+| created_at | timestamp | Log creation time |
+
+---
+
 ## 9. Installation Guide
-Requirements
 
-PHP 8.2+
+### Requirements
+- PHP **8.2+**
+- Composer
+- MySQL **8.0+**
+- Laravel **10.x**
 
-Composer
+### Setup
 
-MySQL 8.0+
-
-Laravel 10.x
-
-Setup
+```bash
 # Clone repository
 git clone https://github.com/Code-With-Mavia/QuirkTasker.git
 cd QuirkTasker
@@ -231,20 +236,18 @@ php artisan migrate
 
 # Start the development server
 php artisan serve
-
-
+```
 Note: API will be publicly available soon.
 
 ## 10. Testing
 
-Use Postman, Insomnia, or curl to test endpoints.
-All requests and responses use JSON format.
+Use **Postman**, **Insomnia**, or `curl` to test API endpoints.  
+All requests and responses use **JSON format** for consistency and interoperability.
 
-Example request:
-```json
+### Example Request
 POST /api/v1/tasks
 Content-Type: application/json
-
+```http
 {
   "user_id": 1,
   "title": "Submit report",
@@ -252,27 +255,29 @@ Content-Type: application/json
   "due": "2025-11-12"
 }
 ```
+
 ## 11. Code Standards
 
-Complies with PSR-4 autoloading and PSR-12 formatting.
+- Complies with **PSR-4 autoloading** and **PSR-12 formatting**.  
+- Service, repository, and interface bindings follow **dependency inversion principles**.  
+- Fully **namespaced** for clarity, IDE support, and long-term maintainability.  
 
-Service, repository, and interface bindings maintain dependency inversion.
-
-Fully namespaced for readability, IDE support, and long-term maintainability.
+---
 
 ## 12. License
 
-This project is licensed under the MIT License.
+This project is licensed under the **MIT License**.
 
-Summary
+---
 
-QuirkTasker demonstrates a real-world, production-ready Laravel REST API design.
+## Summary
+
+**QuirkTasker** represents a real-world, production-ready **Laravel REST API** implementation.  
 It emphasizes:
 
-Versioned REST endpoints
+- Versioned REST endpoints  
+- Maintainable and scalable architecture  
+- Strong adherence to security and validation best practices  
 
-Maintainable and scalable architecture
+The structure is ideal for **enterprise APIs**, **mobile backends**, or **modern web client integrations**.
 
-Strong adherence to security and validation best practices
-
-The structure is adaptable for enterprise APIs, mobile app backends, or web client integrations.
