@@ -34,7 +34,7 @@ The system is built for extensibility and real-world use, supporting multiple AP
 ## 2. Architecture
 
 The project adheres to a layered, SOLID-compliant architecture to ensure maintainability and scalability.
-
+```bash
 app/
 ├── Console/ # Custom artisan commands
 ├── Exceptions/ # Global exception handling
@@ -72,7 +72,7 @@ app/
 ├── BroadcastServiceProvider.php
 ├── EventServiceProvider.php
 └── RouteServiceProvider.php
-
+```
 ### Key Architectural Layers
 
 - **Controllers (V1, V2):** Handle incoming HTTP requests and route them to service methods.  
