@@ -13,8 +13,6 @@ class ActivityLoggerController extends Controller
     }
     /**
      * Display a listing of the resource.
-     */
-    /**
      * GET /api/logger
      * Returns all Activity Logs.
      */
@@ -38,8 +36,6 @@ class ActivityLoggerController extends Controller
 
     /**
      * Display the specified resource.
-     */
-    /**
      * GET /api/logger/{id}
      * Show a single task by ID.
      */

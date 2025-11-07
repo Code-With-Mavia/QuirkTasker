@@ -21,6 +21,34 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('tasks', TaskController::class);
-Route::apiResource('users', UserController::class);
-Route::apiResource('logger', ActivityLoggerController::class);
+Route::prefix('tasks')->group(function () {
+    // List all tasks
+    Route::get('/', [TaskController::class, 'index']); 
+    // Create task        
+    Route::post('/', [TaskController::class, 'store']);        
+    Route::get('/{id}', [TaskController::class, 'show']);  
+    // Update task  
+    Route::put('/{id}', [TaskController::class, 'update']);  
+    // Delete task
+    Route::delete('/{id}', [TaskController::class, 'destroy']); 
+});
+
+Route::prefix('users')->group(function () {
+    // List all users
+    Route::get('/', [UserController::class, 'index']);
+    // Create user         
+    Route::post('/', [UserController::class, 'store']);  
+    // Get user by ID      
+    Route::get('/{id}', [UserController::class, 'show']);  
+    // Update user  
+    Route::put('/{id}', [UserController::class, 'update']); 
+    // Delete user 
+    Route::delete('/{id}', [UserController::class, 'destroy']); 
+});
+
+Route::prefix('logger')->group(function () {
+    // List all Activity logs
+    Route::get('/', [ActivityLoggerController::class,'index']);
+    // Get Activity logs by ID
+    Route::get('/{id}', [ActivityLoggerController::class,'show']);
+});
