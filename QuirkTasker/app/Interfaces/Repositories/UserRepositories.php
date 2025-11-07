@@ -4,6 +4,7 @@ namespace App\Interfaces\Repositories;
 Use Exception;
 use App\Models\User;
 use App\Interfaces\UserRepositoryInterface;
+
 class UserRepositories implements UserRepositoryInterface
 {
     public function showAllUsers()
@@ -46,7 +47,9 @@ class UserRepositories implements UserRepositoryInterface
     {
         try
         {
-            return User::update($id, $data);
+            $user = User::findOrFail($id);
+            $user->update($data);
+            return $user;
         }
         catch(Exception $e)
         {
