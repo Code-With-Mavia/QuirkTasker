@@ -121,6 +121,7 @@ Each module follows a RESTful structure under `/api/v1` and `/api/v2`.
 
 **Response Format Example**
 ```json
+{
 "success": true,
     "data": [
         {
@@ -132,13 +133,15 @@ Each module follows a RESTful structure under `/api/v1` and `/api/v2`.
             "user_id": 4
         },
     ]
-```json
+}
+```
+---
 
-5. Validation and Error Handling
+## 5. Validation and Error Handling
 
-Validation handled via Form Requests (App\Http\Requests).
+Validation is handled via Form Requests (App\Http\Requests).
 
-Common HTTP response codes:
+Common HTTP Response Codes:
 
 200 – Success
 
@@ -152,38 +155,34 @@ Common HTTP response codes:
 
 Responses are standardized across controllers with uniform JSON structures.
 
-6. Security Practices
+## 6. Security Practices
 
-Passwords hashed using Laravel’s Hash::make().
+Passwords are hashed using Laravel’s Hash::make().
 
-Inputs validated for type, format, and constraints.
+All input is validated for type, format, and constraints.
 
-CSRF and signature validation via Laravel middleware.
+CSRF and signature validation are enforced via Laravel middleware.
 
 Future-ready for Laravel Sanctum or Passport authentication integration.
 
-7. Scalability and Maintainability
+## 7. Scalability and Maintainability
 
 Versioned APIs: Supports /v1 and /v2 routes for incremental upgrades.
 
 Pagination: Implemented in all list endpoints via Eloquent’s paginate().
 
-Loose Coupling: Repositories bound to interfaces through service providers.
+Loose Coupling: Repositories are bound to interfaces through service providers.
 
 Migrations: Database schema versioning and evolution handled via artisan commands.
 
-8. Database Schema
-
+## 8. Database Schema
 Users
-
 Field	Type	Description
 id	integer	Primary key
 username	string	User’s name
 email	string	Unique email address
 password	string	Hashed password
-
 Tasks
-
 Field	Type	Description
 id	integer	Primary key
 user_id	integer	Foreign key reference
@@ -191,25 +190,23 @@ title	string	Task title
 priority	enum	low / medium / high
 status	boolean	Completion flag
 due	date	Task due date
-
 ActivityLogger
-
 Field	Type	Description
 id	integer	Primary key
 user_id	integer	User performing the action
 task_id	integer	Affected task
 action	string	Performed action
 created_at	timestamp	Log creation time
-9. Installation Guide
+## 9. Installation Guide
 Requirements
 
-PHP 8.2 or later
+PHP 8.2+
 
 Composer
 
 MySQL 8.0+
 
-Laravel 10
+Laravel 10.x
 
 Setup
 # Clone repository
@@ -232,42 +229,50 @@ DB_PASSWORD=yourpassword
 # Run migrations
 php artisan migrate
 
-# Start server
+# Start the development server
 php artisan serve
 
 
-API WILL BE AVAIBLE SOON
+Note: API will be publicly available soon.
 
-10. Testing
+## 10. Testing
 
 Use Postman, Insomnia, or curl to test endpoints.
 All requests and responses use JSON format.
 
 Example request:
-
+```json
 POST /api/v1/tasks
+Content-Type: application/json
+
 {
   "user_id": 1,
   "title": "Submit report",
   "priority": "high",
   "due": "2025-11-12"
 }
-
-11. Code Standards
+```
+## 11. Code Standards
 
 Complies with PSR-4 autoloading and PSR-12 formatting.
 
 Service, repository, and interface bindings maintain dependency inversion.
 
-Fully namespaced for readability and IDE support.
+Fully namespaced for readability, IDE support, and long-term maintainability.
 
-12. License
+## 12. License
 
-This project is licensed under the MIT License
-.
+This project is licensed under the MIT License.
 
 Summary
 
-QuirkTasker demonstrates a real-world, production-ready Laravel API design.
-It emphasizes versioned REST endpoints, maintainable architecture, and best practices for backend scalability.
+QuirkTasker demonstrates a real-world, production-ready Laravel REST API design.
+It emphasizes:
+
+Versioned REST endpoints
+
+Maintainable and scalable architecture
+
+Strong adherence to security and validation best practices
+
 The structure is adaptable for enterprise APIs, mobile app backends, or web client integrations.
