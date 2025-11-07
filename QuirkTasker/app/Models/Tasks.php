@@ -18,6 +18,7 @@ class Tasks extends Model
         'priority',
         'due',
     ];
+    public $timestamps = false;
 
     // A Task belongs to a User
     public function user()

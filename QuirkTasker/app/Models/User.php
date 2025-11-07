@@ -26,6 +26,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public $timestamps = false;
 
     // A User has many Tasks
     public function tasks()

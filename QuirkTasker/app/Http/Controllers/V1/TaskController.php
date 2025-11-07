@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
@@ -17,14 +16,19 @@ class TaskController extends Controller
         $this->taskService = $taskService;
     }
 
-    // Display a listing of the tasks
-    //GET api/V1/tasks/
+    /**
+     * GET /api/tasks
+     * Returns all tasks.
+     */
     public function index()
     {
-        try {
+        try 
+        {
             $tasks = $this->taskService->showAllTasks();
             return response()->json(['success' => true, 'data' => $tasks], 200);
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) 
+        {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to fetch tasks',
@@ -33,11 +37,14 @@ class TaskController extends Controller
         }
     }
 
-    // Store a newly created task
-    // api/v1/tasks/store
+    /**
+     * POST /api/tasks
+     * Creates a new task. Required: title, priority, user_id.
+     */
     public function store(Request $request)
     {
-        try {
+        try 
+        {
             $validated = $request->validate([
                 'title' => 'required|string|max:255',
                 'status' => 'sometimes|boolean',
@@ -45,19 +52,22 @@ class TaskController extends Controller
                 'due' => 'nullable|date',
                 'user_id' => 'required|integer|exists:users,id'
             ]);
-
             $task = $this->taskService->createTasks($validated);
             return response()->json([
                 'success' => true,
                 'data' => $task,
                 'message' => 'Task created successfully'
             ], 201);
-        } catch (ValidationException $ve) {
+        } 
+        catch (ValidationException $ve) 
+        {
             return response()->json([
                 'success' => false,
                 'errors' => $ve->errors()
             ], 422);
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) 
+        {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create task',
@@ -66,10 +76,14 @@ class TaskController extends Controller
         }
     }
 
-    // Display a specific task
+    /**
+     * GET /api/tasks/{task}
+     * Show a single task by ID.
+     */
     public function show($id)
     {
-        try {
+        try 
+        {
             $task = $this->taskService->findTasks($id);
             if (!$task) {
                 return response()->json([
@@ -81,7 +95,9 @@ class TaskController extends Controller
                 'success' => true,
                 'data' => $task
             ], 200);
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) 
+        {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to fetch task',
@@ -90,10 +106,14 @@ class TaskController extends Controller
         }
     }
 
-    // Update an existing task in storage
+    /**
+     * PUT /api/tasks/{task}
+     * Update an existing task by ID. Only include fields you want to change.
+     */
     public function update(Request $request, $id)
     {
-        try {
+        try 
+        {
             $validated = $request->validate([
                 'title' => 'sometimes|string|max:255',
                 'status' => 'sometimes|boolean',
@@ -113,12 +133,16 @@ class TaskController extends Controller
                 'data' => $task,
                 'message' => 'Task updated successfully'
             ], 200);
-        } catch (ValidationException $ve) {
+        } 
+        catch (ValidationException $ve) 
+        {
             return response()->json([
                 'success' => false,
                 'errors' => $ve->errors()
             ], 422);
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) 
+        {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update task',
@@ -127,10 +151,14 @@ class TaskController extends Controller
         }
     }
 
-    // Remove a task from storage
+    /**
+     * DELETE /api/tasks/{task}
+     * Delete a task by ID.
+     */
     public function destroy($id)
     {
-        try {
+        try 
+        {
             $result = $this->taskService->deleteTasks($id);
             if (!$result) {
                 return response()->json([
@@ -142,7 +170,9 @@ class TaskController extends Controller
                 'success' => true,
                 'message' => 'Task deleted successfully'
             ], 200);
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) 
+        {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete task',

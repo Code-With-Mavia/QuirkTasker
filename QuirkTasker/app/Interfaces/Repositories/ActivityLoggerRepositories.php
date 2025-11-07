@@ -3,6 +3,7 @@
 namespace App\Interfaces\Repositories;
 use App\Models\ActivityLogger;
 use Exception;
+use Illuminate\Support\Facades\Log;
 use App\Interfaces\ActivityLoggerRepositoryInterface;
 class ActivityLoggerRepositories implements ActivityLoggerRepositoryInterface
 {
@@ -14,18 +15,7 @@ class ActivityLoggerRepositories implements ActivityLoggerRepositoryInterface
         }
         catch (Exception $e)
         {
-            throw $e;
-        }
-    }
-
-    public function log($userId, $taskId, $action, $data = null)
-    {
-        try
-        {
-            return ActivityLogger::log($userId, $taskId, $action, $data);
-        }
-        catch (Exception $e)
-        {
+            Log::error('Error fetching all logs', ['exception' => $e]);
             throw $e;
         }
     }
@@ -38,6 +28,7 @@ class ActivityLoggerRepositories implements ActivityLoggerRepositoryInterface
         }
         catch (Exception $e)
         {
+            Log::error('Error fetching tasks', ['exception' => $e]);
             throw $e;
         }
     }

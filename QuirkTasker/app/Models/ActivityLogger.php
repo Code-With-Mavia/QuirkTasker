@@ -10,7 +10,7 @@ class ActivityLogger extends Model
     use HasFactory;
 
     protected $table = 'activity_logger';
-
+    
     protected $fillable = [
         'user_id',
         'task_id',

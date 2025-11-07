@@ -1,49 +1,75 @@
 <?php
 
 namespace App\Http\Controllers\V1;
-
+use App\Interfaces\Services\ActivityLoggerService;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
+use Exception;
 class ActivityLoggerController extends Controller
 {
+    protected ActivityLoggerService $activityLoggerService;
+    public function __construct(ActivityLoggerService $activityLoggerService)
+    {
+        $this->activityLoggerService = $activityLoggerService;
+    }
     /**
      * Display a listing of the resource.
      */
+    /**
+     * GET /api/logger
+     * Returns all Activity Logs.
+     */
     public function index()
     {
-        //
-    }
+        try 
+        {
+            $activities = $this->activityLoggerService->showallActivityLogs();
+            return response()->json(['success' => true, 'data' => $activities], 200);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+        }
+        catch (Exception $e)
+        {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to Activity Logs',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    /**
+     * GET /api/logger/{id}
+     * Show a single task by ID.
+     */
+    public function show($id)
     {
-        //
+        try 
+        {
+            $activities = $this->activityLoggerService->findActivityLogs($id);
+            if (!$activities)
+            {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Activities not found',
+                ], 404);
+            }
+            return response()->json([
+                'success' => true,
+                'data' => $activities
+            ], 200);
+
+        }
+        catch (Exception $e)
+        {
+            return response()->json([
+                'success'=> false,
+                'message' => 'Failed to fetch activity logs',
+                'error' => $e->getMessage()
+            ] , 404);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+    
 }

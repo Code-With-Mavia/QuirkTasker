@@ -33,12 +33,15 @@ class UserService
     // Find single user
     public function findUsers($id)
     {
-        try {
+        try 
+        {
             Log::info('Finding user', ['user_id' => $id]);
             $result = $this->users->findUsers($id);
             Log::debug('User fetched', ['data' => $result]);
             return $result;
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) 
+        {
             Log::error('Failed to find user', ['user_id' => $id, 'exception' => $e->getMessage()]);
             throw $e;
         }
