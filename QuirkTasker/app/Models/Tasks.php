@@ -9,6 +9,8 @@ class Tasks extends Model
 {
     use HasFactory;
 
+    protected $table = 'tasks';
+
     protected $fillable = [
         'user_id',
         'title',
@@ -17,19 +19,15 @@ class Tasks extends Model
         'due',
     ];
 
-    public function Tasks()
-    {
-        return $this->belongsTo(Tasks::class);
-    }
-
-    public function ActivityLogger()
-    {
-        return $this->belongsTo(ActivityLogger::class);
-    }
-
-    public function User()
+    // A Task belongs to a User
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    // A Task has many Activity Logs
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLogger::class);
+    }
 }

@@ -9,6 +9,8 @@ class ActivityLogger extends Model
 {
     use HasFactory;
 
+    protected $table = 'activity_logger';
+
     protected $fillable = [
         'user_id',
         'task_id',
@@ -16,17 +18,18 @@ class ActivityLogger extends Model
         'data',
     ];
 
-    public function ActivityLogger()
-    {
-        return $this->belongsTo(ActivityLogger::class);
-    }
+    public $timestamps = false; 
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = null;
 
-    public function User()
+    // An Activity Log belongs to a User
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function Tasks()
+    // An Activity Log belongs to a Task
+    public function task()
     {
         return $this->belongsTo(Tasks::class);
     }
