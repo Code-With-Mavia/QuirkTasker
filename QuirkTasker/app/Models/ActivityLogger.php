@@ -15,7 +15,6 @@ class ActivityLogger extends Model
         'user_id',
         'task_id',
         'action',
-        'data',
     ];
 
     public $timestamps = false; 
