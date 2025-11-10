@@ -44,7 +44,7 @@ app/
 │ │ │ ├── ActivityLoggerController.php
 │ │ │ ├── TaskController.php
 │ │ │ └── UserController.php
-│ │ └── V2/ # Future API version support
+│ │ └── V2/ # Updated API version using middleware and authentication
 │ │ ├── ActivityLoggerController.php
 │ │ ├── TaskController.php
 │ │ └── UserController.php
@@ -101,7 +101,7 @@ app/
 
 ---
 
-## 4. API Endpoints
+## 4. API Endpoints (v1)
 
 Each module follows a RESTful structure under `/api/v1` and `/api/v2`.
 
@@ -118,6 +118,24 @@ Each module follows a RESTful structure under `/api/v1` and `/api/v2`.
 | **PUT/PATCH** | `/api/v1/tasks/{id}` | Update task |
 | **DELETE** | `/api/v1/tasks/{id}` | Delete task |
 | **GET** | `/api/v1/activity-logs` | Retrieve all user activity logs |
+
+## API Endpoints (v2)
+
+| Method | Endpoint | Description |
+|:--:|:--|:--|
+| **POST** | `/api/login` | Authenticate user and generate access token |
+| **GET** | `/api/v2/users` | List all users |
+| **POST** | `/api/v2/users` | Create a new user |
+| **GET** | `/api/v2/users/{id}` | Get a single user by ID |
+| **PUT** | `/api/v2/users/{id}` | Update user details |
+| **DELETE** | `/api/v2/users/{id}` | Delete a user |
+| **GET** | `/api/v2/tasks` | List all tasks |
+| **POST** | `/api/v2/tasks` | Create a new task |
+| **GET** | `/api/v2/tasks/{id}` | Get task details by ID |
+| **PUT** | `/api/v2/tasks/{id}` | Update task details |
+| **DELETE** | `/api/v2/tasks/{id}` | Delete a task |
+| **GET** | `/api/v2/logger` | Retrieve all activity logs |
+| **GET** | `/api/v2/logger/{id}` | Get specific activity log by ID |
 
 **Response Format Example**
 ```json
