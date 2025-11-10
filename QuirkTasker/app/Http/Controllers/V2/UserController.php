@@ -78,7 +78,7 @@ class UserController extends Controller
                 'success' => false,
                 'message' => 'Failed to fetch tasks',
                 'error' => $e->getMessage()
-            ], 404);
+            ], 401);
         }
         
     }
