@@ -61,7 +61,6 @@ class UserController extends Controller
         return response()->json([ 'token' => $token ]);
     }
 
-
     /**
      * Display a listing of the resource.
      * GET api/users/
