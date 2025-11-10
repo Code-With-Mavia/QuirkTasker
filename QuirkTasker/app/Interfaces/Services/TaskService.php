@@ -19,7 +19,9 @@ class TaskService
         try 
         {
             Log::info('Service: Fetching all tasks');
-            return $this->taskRepo->showAllTasks();
+            $result = $this->taskRepo->showAllTasks();
+            Log::debug('Fetched tasks count', ['count' => count($result)]);
+            return $result;
         } 
         catch (Exception $e) 
         {

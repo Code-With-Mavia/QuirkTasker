@@ -17,8 +17,9 @@ class ActivityLoggerService
          try 
         {
             Log::info('Service: Fetching all Activity Logs');
-            
-            return $this->activityLoggerRepo->showallActivityLogs();
+            $result = $this->activityLoggerRepo->showallActivityLogs();
+            Log::debug('Fetched logs count', ['count' => count($result)]);
+            return $result;
         } 
         catch (Exception $e) 
         {

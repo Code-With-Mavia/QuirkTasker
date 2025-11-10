@@ -27,7 +27,7 @@ class UserController extends Controller
     {
         // Log the attempt (but NEVER log raw passwords)
         Log::info('Login attempt', [
-            'email' => $request->email ?? null,
+            'email' => $request->email,
             'time' => now()->toDateTimeString(),
             'ip' => $request->ip(),
         ]);
