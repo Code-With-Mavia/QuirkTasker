@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Interfaces\Services\UserService;
 use Illuminate\Support\Facades\Hash;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -17,21 +18,49 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
-    public function login(Request $request)
+    /**
+    *   POST api/login 
+    *   the function will process an check if users exist & if it exists it will generate a jwt bearer token 
+    *   and with that the middleware can work through all the routes by authenticating amd then displaying the results 
+    */
+   public function login(Request $request)
     {
+        // Log the attempt (but NEVER log raw passwords)
+        Log::info('Login attempt', [
+            'email' => $request->email ?? null,
+            'time' => now()->toDateTimeString(),
+            'ip' => $request->ip(),
+        ]);
+
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
             'device_name' => 'required',
         ]);
         $user = User::where('email', $request->email)->first();
+
         if (! $user || ! Hash::check($request->password, $user->password)) 
         {
+            Log::warning('Login failed', [
+                'email' => $request->email,
+                'reason' => 'Invalid credentials',
+                'time' => now()->toDateTimeString(),
+                'ip' => $request->ip(),
+            ]);
             return response()->json(['error' => 'The provided credentials are incorrect.'], 401);
         }
+
         $token = $user->createToken($request->device_name)->plainTextToken;
+        Log::notice('Login successful', [
+            'user_id' => $user->id,
+            'email' => $user->email,
+            'time' => now()->toDateTimeString(),
+            'ip' => $request->ip(),
+            'device' => $request->device_name
+        ]);
         return response()->json([ 'token' => $token ]);
     }
+
 
     /**
      * Display a listing of the resource.
@@ -57,7 +86,7 @@ class UserController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * POST v2/api/users/
+     * POST api/v2/users/
      */
     public function store(Request $request)
     {
