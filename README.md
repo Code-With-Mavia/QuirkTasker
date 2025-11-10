@@ -83,21 +83,58 @@ app/
 
 ---
 
-## 3. Core Functional Modules
+## ⚙️ 3. Core Functional Modules
 
-### Users
-- Create, retrieve, update, and delete users.  
-- Passwords hashed with `Hash::make()`.  
-- Strict validation on email uniqueness and password requirements.  
+### 🧑‍💻 Users
+- **Full CRUD:** Create, retrieve, update, and delete users via REST API endpoints following the controller–service–repository pattern.  
+- **Password Security:** All passwords are securely hashed using `Hash::make()` before storage — never stored or returned in plain text.  
+- **Validation:** Robust validation for registration and updates ensures:
+  - Unique email enforcement  
+  - Strong password requirements  
+  - Validation on both create and update actions  
+- **Authentication & Authorization:**  
+  - Login generates a **Laravel Sanctum** token.  
+  - All protected routes use `auth:sanctum` and a custom `restrictRole` middleware for fine-grained access control.  
+  - All login attempts and errors are logged (IP and timestamp included; raw passwords are never logged).  
+- **Standardized API Responses:** Clear JSON structures for successes, validation errors, and server-side failures — ensuring smooth frontend and mobile integration.
 
-### Tasks
-- Each task is linked to a user (`user_id`).  
-- Supports title, priority (enum), due date, and status fields.  
-- Pagination support for large datasets.  
+---
 
-### Activity Logs
-- Tracks user actions (create, update, delete) performed on tasks.  
-- Useful for audit trails and analytics.  
+### ✅ Tasks
+- **User Association:** Each task is linked to a user via `user_id` (foreign key). Only authenticated users can manage their own tasks.  
+- **Fields:**  
+  - `title` — string  
+  - `priority` — enum (`low`, `medium`, `high`)  
+  - `due` — date  
+  - `status` — boolean (completion flag)  
+- **Pagination:**  
+  - Task listing endpoints implement Eloquent’s `paginate()` for scalable response sizes.  
+  - Pagination metadata is included for client-side navigation.  
+- **Security:**  
+  - All task routes are protected via **Sanctum** tokens and middleware, ensuring only authorized users can perform CRUD actions.
+
+---
+
+### 🧾 Activity Logs
+- **Tracking:** Logs all user actions on tasks — create, update, delete — with `user_id`, `task_id`, `action`, and timestamp.  
+- **Analytics & Auditing:**  
+  - Logs are queryable by admins for analytics or compliance monitoring.  
+- **Immutable:**  
+  - Append-only design ensures logs are never deleted or tampered with.  
+- **Accessibility:**  
+  - `/api/v2/logger` endpoints allow admins or privileged users to fetch all logs, filter by user/task, and audit activity.
+
+---
+
+### 🧠 Design Principles
+- **Modern Laravel Architecture:**  
+  - Layered structure with service and repository classes using dependency injection.  
+- **Dependency Inversion:**  
+  - All business logic uses contracts and the service container for flexibility and testability.  
+- **Clean Separation:**  
+  - Business logic and data access layers are fully decoupled for maintainability.  
+- **Extensive Logging:**  
+  - Major events — CRUD operations, authentication attempts, and results — are logged for transparency and debugging.
 
 ---
 
