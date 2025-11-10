@@ -12,7 +12,7 @@ class TaskRepositories implements TaskRepositoryInterface
     {
         try 
         {
-            return Tasks::all();
+            return Tasks::select('id','title','status','priority','due','user_id')->paginate(50);
         } 
         catch (Exception $e) 
         {
@@ -23,7 +23,8 @@ class TaskRepositories implements TaskRepositoryInterface
 
     public function findTasks($id)
     {
-        try {
+        try 
+        {
             return Tasks::find($id);
         } catch (Exception $e) {
             Log::error('Error finding task', ['task_id' => $id, 'exception' => $e]);

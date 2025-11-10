@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Interfaces\Services\UserService;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-
 use Exception;
 
 class UserController extends Controller
@@ -42,7 +40,7 @@ class UserController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * POST api/users/
+     * POST v1/api/users/
      */
     public function store(Request $request)
     {
@@ -50,7 +48,7 @@ class UserController extends Controller
         {
             $validated = $request->validate([
                 'username'=>'required|string|max:50',
-                'email'=>'required|string|max:128',
+                'email'=>'required|string|unique:users,email|max:128',
                 'password'=> 'required|string|min:8',
             ]);
             $validated['password'] = Hash::make($validated['password']);
@@ -150,7 +148,7 @@ class UserController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'User not found or already deleted',
-                ], 404);
+                ], 403);
             }
             return response()->json([
                 'success' => true,
