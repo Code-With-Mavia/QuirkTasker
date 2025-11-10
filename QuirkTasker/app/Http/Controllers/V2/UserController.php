@@ -102,20 +102,21 @@ class UserController extends Controller
             'success' => true,
             'data' => $user,
             'message' => 'User created successfully'
-        ], 201);
+            ], 201);
         }
-        catch (Exception $e) {
-        Log::error('Failed to create user', [
-            'success' => false,
-            'message' => 'Failed to create user',
-            'error' => $e->getMessage()
-        ]);
-        return response()->json([
-            'success' => false,
-            'message' => 'Failed to create user',
-            'error' => $e->getMessage()
-        ],403);
-    }
+        catch (Exception $e) 
+        {
+            Log::error('Failed to create user', [
+                'success' => false,
+                'message' => 'Failed to create user',
+                'error' => $e->getMessage()
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create user',
+                'error' => $e->getMessage()
+            ],403);
+        }
     }
 
     /**
@@ -138,7 +139,7 @@ class UserController extends Controller
                 'success'=> false,
                 'message'=> 'user creation failed',
                 'error'=> $e->getMessage()
-                ], 404);
+                ], 401);
         }
     }
 
@@ -178,7 +179,7 @@ class UserController extends Controller
                 'success' => false,
                 'message' => 'Failed to update user',
                 'error' => $e->getMessage()
-            ], 403);
+            ], 401);
         }
     }
 
@@ -210,7 +211,7 @@ class UserController extends Controller
                 'success' => false,
                 'message' => 'Failed to delete user',
                 'error' => $e->getMessage()
-            ], 403);
+            ], 401);
         }
     }
 }

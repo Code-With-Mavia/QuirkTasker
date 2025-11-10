@@ -59,7 +59,7 @@ class UserService
             } 
             else 
             {
-                Log::warning('Service: User creation returned null', ['data' => $data]);
+                Log::warning('Service: User creation returned unsuccessfull', ['data' => $data]);
             }
             return $result;
         } 
