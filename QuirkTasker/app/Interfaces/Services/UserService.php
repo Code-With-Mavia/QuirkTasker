@@ -50,16 +50,25 @@ class UserService
     // Create new user
     public function createUsers(array $data)
     {
-        try 
-        {
-            Log::info('Creating user', ['data' => $data]);
+        Log::info('Service: Attempting to create user', ['data' => $data]);
+        try {
             $result = $this->users->createUsers($data);
-            Log::notice('User created', ['result' => $result]);
+            if ($result) 
+            {
+                Log::notice('Service: User created', ['user_id' => $result->id]);
+            } 
+            else 
+            {
+                Log::warning('Service: User creation returned null', ['data' => $data]);
+            }
             return $result;
         } 
         catch (Exception $e) 
         {
-            Log::error('Failed to create user', ['data' => $data, 'exception' => $e->getMessage()]);
+            Log::error('Service: Exception during user create', [
+                'data' => $data,
+                'exception' => $e->getMessage()
+            ]);
             throw $e;
         }
     }

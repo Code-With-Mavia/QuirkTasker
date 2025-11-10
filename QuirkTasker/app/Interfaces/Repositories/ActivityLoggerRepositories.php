@@ -11,8 +11,7 @@ class ActivityLoggerRepositories implements ActivityLoggerRepositoryInterface
     {
         try
         {
-            $perPage = 15;
-            return ActivityLogger::latest()->paginate( $perPage );
+            return ActivityLogger::latest()->paginate( 30 );
         }
         catch (Exception $e)
         {

@@ -34,24 +34,24 @@ class UserController extends Controller
 
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required',
-            'device_name' => 'required',
+            'password' => 'required|password',
+            'device_name' => 'required|device_name',
         ]);
         $user = User::where('email', $request->email)->first();
 
         if (! $user || ! Hash::check($request->password, $user->password)) 
         {
-            Log::warning('Login failed', [
+            Log::error('Login failed', [
                 'email' => $request->email,
                 'reason' => 'Invalid credentials',
                 'time' => now()->toDateTimeString(),
-                'ip' => $request->ip(),
+                'ip' => $request->ip(   ),
             ]);
             return response()->json(['error' => 'The provided credentials are incorrect.'], 401);
         }
 
         $token = $user->createToken($request->device_name)->plainTextToken;
-        Log::notice('Login successful', [
+        Log::info('Login successful', [
             'user_id' => $user->id,
             'email' => $user->email,
             'time' => now()->toDateTimeString(),
@@ -104,14 +104,18 @@ class UserController extends Controller
             'message' => 'User created successfully'
         ], 201);
         }
-        catch (Exception $e)
-        {
-            return response()->json([
+        catch (Exception $e) {
+        Log::error('Failed to create user', [
             'success' => false,
             'message' => 'Failed to create user',
             'error' => $e->getMessage()
-        ], 403);
-        }
+        ]);
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to create user',
+            'error' => $e->getMessage()
+        ],403);
+    }
     }
 
     /**
