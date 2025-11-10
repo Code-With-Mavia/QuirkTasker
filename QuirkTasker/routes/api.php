@@ -68,7 +68,7 @@ use App\Http\Controllers\V2\ActivityLoggerController;
 
 // });
 
-
+// v2 routes //
 Route::post('/login', [UserController::class, 'login']); 
 
 Route::prefix('v2')->middleware(['auth:sanctum', 'restrictRole'])->group(function () {
