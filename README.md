@@ -296,7 +296,7 @@ php artisan key:generate
 
 # Update database credentials
 DB_CONNECTION=mysql
-DB_DATABASE=quirktasker
+DB_DATABASE=todolist
 DB_USERNAME=root
 DB_PASSWORD=yourpassword
 
