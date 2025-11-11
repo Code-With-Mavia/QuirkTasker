@@ -34,9 +34,12 @@ class TaskRepositories implements TaskRepositoryInterface
 
     public function createTasks(array $data)
     {
-        try {
+        try 
+        {
             return Tasks::create($data);
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) 
+        {
             Log::error('Error creating task', ['data' => $data, 'exception' => $e]);
             throw $e;
         }
@@ -44,11 +47,14 @@ class TaskRepositories implements TaskRepositoryInterface
 
     public function updateTasks($id, array $data)
     {
-        try {
+        try 
+        {
             $task = Tasks::findOrFail($id);
             $task->update($data);
             return $task;
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) 
+        {
             Log::error('Error updating task', ['task_id' => $id, 'data' => $data, 'exception' => $e]);
             throw $e;
         }
@@ -59,7 +65,8 @@ class TaskRepositories implements TaskRepositoryInterface
         try 
         {
             $task = Tasks::find($id);
-            if ($task) {
+            if ($task) 
+            {
                 return $task->delete();
             }
             return false;

@@ -185,6 +185,8 @@ Each module follows a RESTful structure under `/api/v1` and `/api/v2`.
 | **DELETE** | `/api/v2/tasks/{id}` | Delete a task |
 | **GET** | `/api/v2/logger` | Retrieve all activity logs |
 | **GET** | `/api/v2/logger/{id}` | Get specific activity log by ID |
+| **PUT** | `/api/v2/logger/{id}` | UPDATE specific activity log by ID |
+| **DELETE** | `/api/v2/logger/{id}` | DELETE specific activity log by ID |
 
 **Response Format Example**
 ```json

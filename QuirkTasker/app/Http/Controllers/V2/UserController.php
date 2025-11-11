@@ -20,7 +20,7 @@ class UserController extends Controller
 
     /**
     *   POST api/login 
-    *   the function will process an check if users exist & if it exists it will generate a jwt bearer token 
+    *   the function will process an check if users exist & if it exists it will generate a bearer token 
     *   and with that the middleware can work through all the routes by authenticating amd then displaying the results 
     */
    public function login(Request $request)

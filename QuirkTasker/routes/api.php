@@ -94,6 +94,8 @@ Route::prefix('v2')->middleware(['auth:sanctum', 'restrictRole'])->group(functio
     Route::prefix('logger')->group(function () {
         Route::get('/', [ActivityLoggerController::class, 'index']);
         Route::get('/{id}', [ActivityLoggerController::class, 'show']);
+        Route::put('/{id}', [ActivityLoggerController::class,'update']);
+        Route::delete('/{id}', [ActivityLoggerController::class,'destroy']);
     });
 });
 
