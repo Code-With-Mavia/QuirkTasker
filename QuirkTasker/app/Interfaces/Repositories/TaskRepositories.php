@@ -26,7 +26,9 @@ class TaskRepositories implements TaskRepositoryInterface
         try 
         {
             return Tasks::find($id);
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) 
+        {
             Log::error('Error finding task', ['task_id' => $id, 'exception' => $e]);
             throw $e;
         }
