@@ -43,7 +43,7 @@ class UserRepositories implements UserRepositoryInterface
         }
     }
 
-    public function updateusers($id, array $data)
+    public function updateUsers($id, array $data)
     {
         try
         {

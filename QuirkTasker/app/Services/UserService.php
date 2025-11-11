@@ -1,14 +1,14 @@
 <?php
-namespace App\Interfaces\Services;
+namespace App\Services;
 
 use Illuminate\Support\Facades\Log;
-use App\Interfaces\Repositories\UserRepositories;
+use App\Interfaces\UserRepositoryInterface;
 use Exception;
 
 class UserService
 {
-    protected UserRepositories $users;
-    public function __construct(UserRepositories $users)
+    protected UserRepositoryInterface $users;
+    public function __construct(UserRepositoryInterface $users)
     {
         $this->users = $users;
     }

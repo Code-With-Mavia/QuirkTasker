@@ -9,7 +9,7 @@ interface UserRepositoryInterface
 
     public function createUsers(array $data);
 
-    public function updateusers($id, array $data);
+    public function updateUsers($id, array $data);
 
     public function deleteUsers($id);
 }

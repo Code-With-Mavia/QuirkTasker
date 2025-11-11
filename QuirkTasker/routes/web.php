@@ -13,8 +13,8 @@ use App\Interfaces\Services\UserService;
 |
 */
 
-Route::get('/', function (UserService $UserService) {
-    // dump($UserService->showAllUsers());
-    // dd(app());
-    return view('', []);
-});
+// Route::get('/', function (UserService $UserService) {
+//     // dump($UserService->showAllUsers());
+//     // dd(app());
+//     return view('', []);
+// });

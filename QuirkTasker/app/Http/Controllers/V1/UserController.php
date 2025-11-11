@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Interfaces\Services\UserService;
+use App\Services\UserService;
 use Illuminate\Support\Facades\Hash;
 use Exception;
 
