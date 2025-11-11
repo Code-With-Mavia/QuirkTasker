@@ -1,5 +1,5 @@
 <?php
-namespace App\Interfaces\Services;
+namespace App\Services;
 
 use App\Interfaces\TaskRepositoryInterface;
 use Illuminate\Support\Facades\Log;

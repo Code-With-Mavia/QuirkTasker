@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\V2;
-use App\Interfaces\Services\ActivityLoggerService;
+use App\Services\ActivityLoggerService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
