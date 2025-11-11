@@ -73,7 +73,7 @@ Route::prefix('v1')->group(function () {
 
 Route::post('/login', [UserControllerV2::class, 'login']); 
 
-Route::prefix('v2')->middleware(['auth:sanctum', 'restrictRole'])->group(function () {
+Route::middleware(['auth:sanctum', 'restrictRole'])->prefix('v2')->group(function () {
     // USERS (protected)
     Route::prefix('users')->group(function () {
         Route::get('/', [UserControllerV2::class, 'index']);

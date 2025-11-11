@@ -11,7 +11,7 @@ class UserRepositories implements UserRepositoryInterface
     {
         try
         {
-            return User::all();
+            return User::withCount('tasks')->paginate(50);;
         }
         catch(Exception $e)
         {

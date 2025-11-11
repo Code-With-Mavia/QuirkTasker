@@ -20,6 +20,7 @@ class UserService
         {
             Log::info('Fetching all users');
             $result = $this->users->showAllUsers();
+            
             Log::debug('Fetched users count', ['count' => count($result)]);
             return $result;
         } 

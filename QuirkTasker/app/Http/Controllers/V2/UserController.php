@@ -25,7 +25,7 @@ class UserController extends Controller
     */
    public function login(Request $request)
     {
-        // Log the attempt (but NEVER log raw passwords)
+        
         Log::info('Login attempt', [
             'email' => $request->email,
             'time' => now()->toDateTimeString(),
@@ -76,7 +76,7 @@ class UserController extends Controller
         {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to fetch tasks',
+                'message' => 'Failed to fetch users',
                 'error' => $e->getMessage()
             ], 401);
         }
@@ -127,17 +127,19 @@ class UserController extends Controller
         try 
         {
             $user = $this->userService->findUsers($id);
+            if(!$user)
+            {
+                throw new Exception('User not found');
+            }
             return response()->json([
                 'success'=> true,
                 'data'=> $user,
-                'message'=> 'User created successfully',
                 ],200);
         }
         catch (Exception $e)
         {
             return response()->json([
                 'success'=> false,
-                'message'=> 'user creation failed',
                 'error'=> $e->getMessage()
                 ], 401);
         }
