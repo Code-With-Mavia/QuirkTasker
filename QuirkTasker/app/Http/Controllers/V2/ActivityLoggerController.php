@@ -35,7 +35,7 @@ class ActivityLoggerController extends Controller
                 'success' => false,
                 'message' => 'Failed to Activity Logs',
                 'error' => $e->getMessage()
-            ], 500);
+            ], 401);
         }
     }
 
