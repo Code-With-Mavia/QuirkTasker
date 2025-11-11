@@ -23,7 +23,7 @@ class UserRepositories implements UserRepositoryInterface
     {
         try
         {
-            return User::find($id);
+            return User::findOrFail($id);
         }
         catch(Exception $e)
         {
