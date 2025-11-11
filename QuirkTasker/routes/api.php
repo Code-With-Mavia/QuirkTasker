@@ -102,5 +102,5 @@ Route::middleware(['auth:sanctum', 'restrictRole'])->prefix('v2')->group(functio
 });
 
 
-
+?>
 
