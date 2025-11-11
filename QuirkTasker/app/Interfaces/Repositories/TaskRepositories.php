@@ -12,7 +12,7 @@ class TaskRepositories implements TaskRepositoryInterface
     {
         try 
         {
-            return Tasks::with('activity_logger:id,action')->select('id','activity_logger_id','action','title','status','priority','due','user_id')->paginate(50);
+            return Tasks::select('id','title','status','priority','due','user_id')->paginate(50);
         } 
         catch (Exception $e) 
         {

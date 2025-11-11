@@ -26,9 +26,16 @@ class Tasks extends Model
         return $this->belongsTo(User::class);
     }
 
+    // // A Log belongs to Tasks
+    // public function activity_logger() 
+    // {
+    //     return $this->belongsTo(ActivityLogger::class );
+    // }
+
     // A Task has many Activity Logs
     public function activityLogs()
     {
         return $this->hasMany(ActivityLogger::class);
     }
+    
 }
