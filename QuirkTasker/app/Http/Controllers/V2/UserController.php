@@ -8,6 +8,9 @@ use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Support\Facades\Hash;
 use Exception;
+use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserCreateRequest;
+use App\Http\Requests\UserUpdateRequest;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
@@ -23,7 +26,7 @@ class UserController extends Controller
     *   the function will process an check if users exist & if it exists it will generate a bearer token 
     *   and with that the middleware can work through all the routes by authenticating amd then displaying the results 
     */
-   public function login(Request $request)
+   public function login(UserRequest $request)
     {
         
         Log::info('Login attempt', [
@@ -34,9 +37,10 @@ class UserController extends Controller
 
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required|password',
-            'device_name' => 'required|device_name',
+            'password' => 'required|string',         // Just use 'string', not 'password'
+            'device_name' => 'required|string',      // Just use 'string', not 'device_name'
         ]);
+
         $user = User::where('email', $request->email)->first();
 
         if (! $user || ! Hash::check($request->password, $user->password)) 
@@ -87,7 +91,7 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      * POST api/v2/users/
      */
-    public function store(Request $request)
+    public function store(UserCreateRequest $request)
     {
         try
         {
@@ -149,7 +153,7 @@ class UserController extends Controller
      * Update the specified user in storage.
      * PUT/PATCH api/users/{id}
      */
-    public function update(Request $request, $id)
+    public function update(UserUpdateRequest $request, $id)
     {
         try 
         {

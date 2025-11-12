@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\LoggerUpdateRequest;
 use Exception;
 class ActivityLoggerController extends Controller
 {
@@ -74,7 +75,7 @@ class ActivityLoggerController extends Controller
      * PUT /api/logger/{logs}
      * Update an existing logs by ID. Only include fields you want to change.
      */
-    public function update(Request $request,$id)
+    public function update(LoggerUpdateRequest $request,$id)
     {
         try
         {

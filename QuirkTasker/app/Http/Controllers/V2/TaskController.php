@@ -2,9 +2,10 @@
 namespace App\Http\Controllers\V2;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Services\TaskService;
 use Illuminate\Validation\ValidationException;
+use App\Http\Requests\TaskStoreRequest;
+use App\Http\Requests\TaskUpdateRequest;
 use Exception;
 
 class TaskController extends Controller
@@ -41,7 +42,7 @@ class TaskController extends Controller
      * POST /api/tasks
      * Creates a new task. Required: title, priority, user_id.
      */
-    public function store(Request $request)
+    public function store(TaskStoreRequest $request)
     {
         try 
         {
@@ -110,7 +111,7 @@ class TaskController extends Controller
      * PUT /api/tasks/{task}
      * Update an existing task by ID. Only include fields you want to change.
      */
-    public function update(Request $request, $id)
+    public function update(TaskUpdateRequest $request, $id)
     {
         try 
         {
