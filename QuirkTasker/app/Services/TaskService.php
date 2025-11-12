@@ -70,7 +70,7 @@ class TaskService
             if(!$updated)
             {
                 Log::warning('Update failed - task not found', ['task_id' => $id]);
-                return null;
+                return true;
             }
             Log::debug('Task updated successfully', ['task_id' => $id]);
             return $updated;
@@ -84,21 +84,26 @@ class TaskService
 
     public function deleteTasks($id)
     {
-        try 
-        {
+        try {
             Log::info('Service: Deleting task', ['task_id' => $id]);
+
             $deleted = $this->taskRepo->deleteTasks($id);
-            if(!$deleted)
-            {
+
+            if (!$deleted) {
                 Log::warning('Delete failed - task not found', ['task_id' => $id]);
-                return null;
+                return false;
             }
-            Log::debug('Task deleted successfully', ['task_id'=> $id]);
-        } 
-        catch (Exception $e) 
-        {
-            Log::error('Service: Error deleting task', ['task_id' => $id, 'exception' => $e]);
+
+            Log::debug('Task deleted successfully', ['task_id' => $id]);
+            return true;
+
+        } catch (Exception $e) {
+            Log::error('Service: Error deleting task', [
+                'task_id' => $id,
+                'exception' => $e->getMessage(),
+            ]);
             throw $e;
         }
     }
+
 }

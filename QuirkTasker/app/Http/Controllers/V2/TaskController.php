@@ -116,7 +116,7 @@ class TaskController extends Controller
                 'success' => false,
                 'message' => 'Failed to update task',
                 'error' => $e->getMessage(),
-            ], 500);
+            ], 401);
         }
     }
 
@@ -126,9 +126,9 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        try {
+        try 
+        {
             $deleted = $this->taskService->deleteTasks($id);
-
             if (!$deleted) {
                 return response()->json([
                     'success' => false,
@@ -140,13 +140,17 @@ class TaskController extends Controller
                 'success' => true,
                 'message' => 'Task deleted successfully',
             ], 200);
-        } catch (Exception $e) {
+
+        } 
+        catch (Exception $e) 
+        {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete task',
                 'error' => $e->getMessage(),
-            ], 500);
+            ], 401);
         }
     }
+
 }
 ?>

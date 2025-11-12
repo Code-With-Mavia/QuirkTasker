@@ -12,7 +12,7 @@ class TaskRepositories implements TaskRepositoryInterface
     {
         try 
         {
-            return Tasks::select('id','title','status','priority','due','user_id')->paginate(50);
+            return Tasks::select('id','title','status','priority','due','user_id')->paginate(30);
         } 
         catch (Exception $e) 
         {
@@ -67,16 +67,21 @@ class TaskRepositories implements TaskRepositoryInterface
         try 
         {
             $task = Tasks::find($id);
-            if ($task) 
-            {
-                return $task->delete();
+
+            if ($task) {
+                $task->delete();
+                return true;
             }
             return false;
         } 
         catch (Exception $e) 
         {
-            Log::error('Error deleting task', ['task_id' => $id, 'exception' => $e]);
+            Log::error('Error deleting task', [
+                'task_id' => $id,
+                'exception' => $e->getMessage(),
+            ]);
             throw $e;
         }
     }
+
 }
