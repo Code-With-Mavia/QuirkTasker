@@ -27,7 +27,7 @@ class UserController extends Controller
         $data = $request->validated();
         $user = User::where('email', $data['email'])->first();
 
-        if (! $user || ! Hash::check($data['password'], $user->password)) 
+        if (! $user && ! Hash::check($data['password'], $user->password)) 
         {
             return response()->json(['error' => 'Invalid credentials'], 401);
         }
@@ -53,7 +53,7 @@ class UserController extends Controller
                 'success' => false,
                 'message' => 'Failed to fetch users',
                 'error'   => $e->getMessage(),
-            ], 500);
+            ], 404);
         }
     }
 
@@ -75,7 +75,7 @@ class UserController extends Controller
                 'success' => false,
                 'message' => 'Failed to create user',
                 'error'   => $e->getMessage(),
-            ], 500);
+            ], 401);
         }
     }
 
@@ -101,7 +101,7 @@ class UserController extends Controller
                 'success' => false,
                 'message' => 'Failed to fetch user',
                 'error'   => $e->getMessage(),
-            ], 500);
+            ], 401);
         }
     }
 
@@ -135,7 +135,7 @@ class UserController extends Controller
                 'success' => false,
                 'message' => 'Failed to update user',
                 'error'   => $e->getMessage(),
-            ], 500);
+            ], 401);
         }
     }
 
@@ -165,7 +165,7 @@ class UserController extends Controller
                 'success' => false,
                 'message' => 'Failed to delete user',
                 'error'   => $e->getMessage(),
-            ], 500);
+            ], 401);
         }
     }
 }
