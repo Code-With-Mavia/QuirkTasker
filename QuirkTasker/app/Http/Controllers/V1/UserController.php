@@ -47,8 +47,8 @@ class UserController extends Controller
     {
         try
         {
-            $validated['password'] = Hash::make($request->validated(['password']));
             $user = $this->userService->createUsers($request->validated());
+            $user['password'] = Hash::make($request->validated(['password']));
             return response()->json([
             'success' => true,
             'data' => $user,
