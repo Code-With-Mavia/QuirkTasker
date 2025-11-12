@@ -36,23 +36,23 @@ The system is built for extensibility and real-world use, supporting multiple AP
 The project adheres to a layered, SOLID-compliant architecture to ensure maintainability and scalability.
 ```bash
 app/
-├── Console                   # Artisan commands for CLI automation (e.g., scheduled tasks)
-│   └── Kernel.php            # Console command scheduler/registry
-├── Exceptions                # Custom exception handlers and error logic
-│   └── Handler.php           # Centralized exception handler
-├── Http                      # Handles web/API requests (controllers, middleware, requests)
-│   ├── Controllers           # Route endpoints: group by version for API evolution
-│   │   ├── Controller.php    # Base controller (common logic)
-│   │   ├── V1                # API version 1 controllers
+├── Console                   # CLI command definitions (Artisan commands, scheduling)
+│   └── Kernel.php            # Registers console commands and schedules tasks
+├── Exceptions                # Global error management
+│   └── Handler.php           # Catches and processes app exceptions
+├── Http                      # Handles HTTP layer: requests, routing, responses
+│   ├── Controllers           # Route logic handled by controller classes
+│   │   ├── Controller.php    # Base controller, shared methods
+│   │   ├── V1                # API version 1 endpoints
 │   │   │   ├── ActivityLoggerController.php
 │   │   │   ├── TaskController.php
 │   │   │   └── UserController.php
-│   │   └── V2                # API version 2 controllers (authentication & form requests/compatibility)
+│   │   └── V2                # API version 2 endpoints (for future evolution)
 │   │       ├── ActivityLoggerController.php
 │   │       ├── TaskController.php
 │   │       └── UserController.php
-│   ├── Kernel.php            # HTTP middleware registration
-│   ├── Middleware            # Filters for requests (auth, CSRF, input handling, etc.)
+│   ├── Kernel.php            # Registers HTTP middleware stack
+│   ├── Middleware            # Request filters: auth, input, security, maintenance, etc.
 │   │   ├── Authenticate.php
 │   │   ├── CheckRole.php
 │   │   ├── EncryptCookies.php
@@ -64,14 +64,18 @@ app/
 │   │   ├── ValidateSignature.php
 │   │   ├── ValidateUser.php
 │   │   └── VerifyCsrfToken.php
-│   └── Requests              # Form request validation objects (sanitize user input)
-│       ├── LoggerUpdateRequest.php
-│       ├── TaskStoreRequest.php
-│       ├── TaskUpdateRequest.php
-│       ├── UserCreateRequest.php
-│       ├── UserRequest.php
-│       └── UserUpdateRequest.php
-├── Interfaces                # Contracts for repositories/services (enforces decoupling)
+│   ├── Requests              # Handles request data validation and authorization
+│   │   ├── LoggerUpdateRequest.php
+│   │   ├── TaskStoreRequest.php
+│   │   ├── TaskUpdateRequest.php
+│   │   ├── UserCreateRequest.php
+│   │   ├── UserRequest.php
+│   │   └── UserUpdateRequest.php
+│   └── Resources             # API resource transformers for response formatting
+│       ├── ActivityLoggerResource.php
+│       ├── TaskResource.php
+│       └── UserResource.php
+├── Interfaces                # Contracts for repositories/services to enforce abstractions
 │   ├── ActivityLoggerRepositoryInterface.php
 │   ├── Repositories
 │   │   ├── ActivityLoggerRepositories.php
@@ -79,17 +83,17 @@ app/
 │   │   └── UserRepositories.php
 │   ├── TaskRepositoryInterface.php
 │   └── UserRepositoryInterface.php
-├── Models                    # Eloquent ORM models (represent DB tables/business logic)
+├── Models                    # Eloquent models (DB entities)
 │   ├── ActivityLogger.php
 │   ├── Tasks.php
 │   └── User.php
-├── Providers                 # Service providers: bind/register app services on boot
+├── Providers                 # Registers/binds app services and dependencies
 │   ├── AppServiceProvider.php
 │   ├── AuthServiceProvider.php
 │   ├── BroadcastServiceProvider.php
 │   ├── EventServiceProvider.php
 │   └── RouteServiceProvider.php
-└── Services                  # Business logic/services not tied to controllers (SRP)
+└── Services                  # Handles business logic, decoupled from controllers and models
     ├── ActivityLoggerService.php
     ├── TaskService.php
     └── UserService.php
