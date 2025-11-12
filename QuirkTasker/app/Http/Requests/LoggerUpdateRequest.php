@@ -24,7 +24,7 @@ class LoggerUpdateRequest extends FormRequest
         return [
             'user_id' => 'somtimes|integer|exists:users,id',
             'task_id' => 'sometimes|integer|exists:tasks,id',
-            'action' => 'required|in:completed,not completed,in progress'
+            'action' => 'required|string'
         ];
     }
 }

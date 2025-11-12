@@ -44,11 +44,14 @@ class TaskController extends Controller
      */
     public function store(TaskStoreRequest $request)
     {
-        try {
+        try 
+        {
             $task = $this->taskService->createTasks($request->validated());
             return (new TaskResource($task))
                 ->additional(['success' => true, 'message' => 'Task created successfully']);
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) 
+        {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create task',
@@ -63,24 +66,27 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        try {
+        try 
+        {
             $task = $this->taskService->findTasks($id);
 
-            if (!$task) {
+            if (!$task) 
+            {
                 return response()->json([
                     'success' => false,
                     'message' => 'Task not found',
                 ], 404);
             }
 
-            return (new TaskResource($task))
-                ->additional(['success' => true]);
-        } catch (Exception $e) {
+            return (new TaskResource($task))->additional(['success' => true]);
+        } 
+        catch (Exception $e) 
+        {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to fetch task',
                 'error' => $e->getMessage(),
-            ], 500);
+            ], 401);
         }
     }
 
@@ -90,19 +96,22 @@ class TaskController extends Controller
      */
     public function update(TaskUpdateRequest $request, $id)
     {
-        try {
+        try 
+        {
             $task = $this->taskService->updateTasks($id, $request->validated());
 
-            if (!$task) {
+            if (!$task) 
+            {
                 return response()->json([
                     'success' => false,
                     'message' => 'Task not found',
                 ], 404);
             }
 
-            return (new TaskResource($task))
-                ->additional(['success' => true, 'message' => 'Task updated successfully']);
-        } catch (Exception $e) {
+            return (new TaskResource($task))->additional(['success' => true, 'message' => 'Task updated successfully']);
+        } 
+        catch (Exception $e) 
+        {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update task',

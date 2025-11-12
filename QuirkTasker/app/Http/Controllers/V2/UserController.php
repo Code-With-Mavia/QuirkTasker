@@ -25,7 +25,6 @@ class UserController extends Controller
     public function login(UserRequest $request)
     {
         $data = $request->validated();
-
         $user = User::where('email', $data['email'])->first();
 
         if (! $user || ! Hash::check($data['password'], $user->password)) 
@@ -33,8 +32,7 @@ class UserController extends Controller
             return response()->json(['error' => 'Invalid credentials'], 401);
         }
 
-        $token = $user->createToken($data['device_name'])->plainTextToken;
-
+        $token = $user->createToken($data['name'])->plainTextToken;
         return response()->json([
             'success' => true,
             'token'   => $token,

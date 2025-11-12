@@ -24,8 +24,8 @@ class TaskUpdateRequest extends FormRequest
         return [
             'title' => 'sometimes|string|max:255',
             'status' => 'sometimes|boolean',
-            'priority' => 'sometimes|in:High,Medium,Low',
-            'due' => 'nullable|date',
+            'priority' => 'sometimes|in:high,medium,low',
+            'due' => 'sometimes|date',
             'user_id' => 'sometimes|integer|exists:users,id'
         ];
     }

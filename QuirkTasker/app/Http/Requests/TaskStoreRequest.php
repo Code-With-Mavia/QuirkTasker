@@ -24,8 +24,8 @@ class TaskStoreRequest extends FormRequest
         return [
            'title' => 'required|string|max:255',
             'status' => 'sometimes|boolean',
-            'priority' => 'required|in:High,Medium,Low',
-            'due' => 'nullable|date',
+            'priority' => 'required|in:high,medium,low',
+            'due' => 'required|date',
             'user_id' => 'required|integer|exists:users,id'
         ];
     }
