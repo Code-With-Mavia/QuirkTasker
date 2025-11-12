@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\V2;
 use App\Services\ActivityLoggerService;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\LoggerUpdateRequest;
@@ -86,13 +85,7 @@ class ActivityLoggerController extends Controller
             'ip' => $request->ip(),
             'time' => now()->toDateTimeString(),
         ]);
-            $validated = $request->validate([
-                'user_id' => 'somtimes|integer|exists:users,id',
-                'task_id' => 'sometimes|integer|exists:tasks,id',
-                'action' => 'required|in:completed,not completed,in progress'
-                
-            ]);
-            $logs = $this->activityLoggerService->updateActivityLogs($id, $validated);
+            $logs = $this->activityLoggerService->updateActivityLogs($id, $request->validated());
             if (!$logs)
             {
                 Log::warning('Update failed: Task not found', [
@@ -106,7 +99,7 @@ class ActivityLoggerController extends Controller
             }
             Log::notice('ActivityLog updated successfully', [
             'activity_logger_id' => $id,
-            'updated_fields' => $validated,
+            'updated_fields' => $request->validated(),
             'user_id' => auth()->id(),
             'ip' => $request->ip(),
             'time' => now()->toDateTimeString(),

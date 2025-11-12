@@ -36,42 +36,64 @@ The system is built for extensibility and real-world use, supporting multiple AP
 The project adheres to a layered, SOLID-compliant architecture to ensure maintainability and scalability.
 ```bash
 app/
-├── Console/ # Custom artisan commands
-├── Exceptions/ # Global exception handling
-├── Http/
-│ ├── Controllers/ # API controllers (v1, v2)
-│ │ ├── V1/
-│ │ │ ├── ActivityLoggerController.php
-│ │ │ ├── TaskController.php
-│ │ │ └── UserController.php
-│ │ └── V2/ # Updated API version using middleware and authentication
-│ │ ├── ActivityLoggerController.php
-│ │ ├── TaskController.php
-│ │ └── UserController.php
-│ ├── Middleware/ # HTTP middleware stack
-│ └── Kernel.php
-├── Interfaces/
-│ ├── ActivityLoggerRepositoryInterface.php
-│ ├── TaskRepositoryInterface.php
-│ ├── UserRepositoryInterface.php
-│ ├── Repositories/
-│ │ ├── ActivityLoggerRepositories.php
-│ │ ├── TaskRepositories.php
-│ │ └── UserRepositories.php
-│ ├── Services/
-│ │ ├── ActivityLoggerService.php
-│ │ ├── TaskService.php
-│ │ └── UserService.php
-├── Models/
-│ ├── ActivityLogger.php
-│ ├── Tasks.php
-│ └── User.php
-└── Providers/
-├── AppServiceProvider.php
-├── AuthServiceProvider.php
-├── BroadcastServiceProvider.php
-├── EventServiceProvider.php
-└── RouteServiceProvider.php
+├── Console                   # Artisan commands for CLI automation (e.g., scheduled tasks)
+│   └── Kernel.php            # Console command scheduler/registry
+├── Exceptions                # Custom exception handlers and error logic
+│   └── Handler.php           # Centralized exception handler
+├── Http                      # Handles web/API requests (controllers, middleware, requests)
+│   ├── Controllers           # Route endpoints: group by version for API evolution
+│   │   ├── Controller.php    # Base controller (common logic)
+│   │   ├── V1                # API version 1 controllers
+│   │   │   ├── ActivityLoggerController.php
+│   │   │   ├── TaskController.php
+│   │   │   └── UserController.php
+│   │   └── V2                # API version 2 controllers (authentication & form requests/compatibility)
+│   │       ├── ActivityLoggerController.php
+│   │       ├── TaskController.php
+│   │       └── UserController.php
+│   ├── Kernel.php            # HTTP middleware registration
+│   ├── Middleware            # Filters for requests (auth, CSRF, input handling, etc.)
+│   │   ├── Authenticate.php
+│   │   ├── CheckRole.php
+│   │   ├── EncryptCookies.php
+│   │   ├── PreventRequestsDuringMaintenance.php
+│   │   ├── RedirectIfAuthenticated.php
+│   │   ├── TrimStrings.php
+│   │   ├── TrustHosts.php
+│   │   ├── TrustProxies.php
+│   │   ├── ValidateSignature.php
+│   │   ├── ValidateUser.php
+│   │   └── VerifyCsrfToken.php
+│   └── Requests              # Form request validation objects (sanitize user input)
+│       ├── LoggerUpdateRequest.php
+│       ├── TaskStoreRequest.php
+│       ├── TaskUpdateRequest.php
+│       ├── UserCreateRequest.php
+│       ├── UserRequest.php
+│       └── UserUpdateRequest.php
+├── Interfaces                # Contracts for repositories/services (enforces decoupling)
+│   ├── ActivityLoggerRepositoryInterface.php
+│   ├── Repositories
+│   │   ├── ActivityLoggerRepositories.php
+│   │   ├── TaskRepositories.php
+│   │   └── UserRepositories.php
+│   ├── TaskRepositoryInterface.php
+│   └── UserRepositoryInterface.php
+├── Models                    # Eloquent ORM models (represent DB tables/business logic)
+│   ├── ActivityLogger.php
+│   ├── Tasks.php
+│   └── User.php
+├── Providers                 # Service providers: bind/register app services on boot
+│   ├── AppServiceProvider.php
+│   ├── AuthServiceProvider.php
+│   ├── BroadcastServiceProvider.php
+│   ├── EventServiceProvider.php
+│   └── RouteServiceProvider.php
+└── Services                  # Business logic/services not tied to controllers (SRP)
+    ├── ActivityLoggerService.php
+    ├── TaskService.php
+    └── UserService.php
+
 ```
 ### Key Architectural Layers
 

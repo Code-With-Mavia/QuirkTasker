@@ -46,14 +46,7 @@ class TaskController extends Controller
     {
         try 
         {
-            $validated = $request->validate([
-                'title' => 'required|string|max:255',
-                'status' => 'sometimes|boolean',
-                'priority' => 'required|in:High,Medium,Low',
-                'due' => 'nullable|date',
-                'user_id' => 'required|integer|exists:users,id'
-            ]);
-            $task = $this->taskService->createTasks($validated);
+            $task = $this->taskService->createTasks($request->validated());
             return response()->json([
                 'success' => true,
                 'data' => $task,
@@ -115,14 +108,7 @@ class TaskController extends Controller
     {
         try 
         {
-            $validated = $request->validate([
-                'title' => 'sometimes|string|max:255',
-                'status' => 'sometimes|boolean',
-                'priority' => 'sometimes|in:High,Medium,Low',
-                'due' => 'nullable|date',
-                'user_id' => 'sometimes|integer|exists:users,id'
-            ]);
-            $task = $this->taskService->updateTasks($id, $validated);
+            $task = $this->taskService->updateTasks($id, $request->validated());
             if (!$task) {
                 return response()->json([
                     'success' => false,
