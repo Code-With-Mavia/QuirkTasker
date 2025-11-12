@@ -1,5 +1,6 @@
 <?php
 namespace App\Services;
+
 use App\Interfaces\ActivityLoggerRepositoryInterface;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -47,7 +48,14 @@ class ActivityLoggerService
         try 
         {
             Log::info('Service: Finding Activity Logs via id to update it', ['activity_logger_id' => $id,'data' => $data]);
-            return $this->activityLoggerRepo->updateActivityLogs($id, $data);
+            $updated = $this->activityLoggerRepo->updateActivityLogs($id, $data);
+            if(!$updated)
+            {
+                Log::warning('Update failed - Activity Logs not found', ['activity_logger_id' => $id]);
+                return null;
+            }
+            Log::debug('Activity Logs updated successfully', ['activity_logger_id' => $id]);
+            return $updated;
         }
         catch (Exception $e)
         {
@@ -61,9 +69,14 @@ class ActivityLoggerService
         try
         {
             Log::info('Service: Finding Activity Logs via id to delete it', ['activity_logger_id' => $id]);
-            $logs = $this->activityLoggerRepo->deleteActivityLogs($id );
-            Log::debug('Deleted logs', ['id'=> $id]);
-            return $logs;
+            $deleted = $this->activityLoggerRepo->deleteActivityLogs($id );
+            if(!$deleted)
+            {
+                Log::warning('Delete failed - Activity Logs not found', ['activity_logger_id' => $id]);
+                return null;
+            }
+            Log::debug('Activity Logs deleted successfully', ['activity_logger_id' => $id]);
+            return $deleted;
         }
         catch (Exception $e)
         {

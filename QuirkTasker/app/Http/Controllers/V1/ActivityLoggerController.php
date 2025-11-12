@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\V1;
-use App\Interfaces\Services\ActivityLoggerService;
+use App\Services\ActivityLoggerService;
 use App\Http\Controllers\Controller;
 use Exception;
 class ActivityLoggerController extends Controller

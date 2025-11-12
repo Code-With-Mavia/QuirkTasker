@@ -3,223 +3,172 @@
 namespace App\Http\Controllers\V2;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\User;
 use App\Services\UserService;
-use Illuminate\Support\Facades\Hash;
-use Exception;
-use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
-use Illuminate\Support\Facades\Log;
+use App\Http\Requests\UserRequest;
+use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use Exception;
 
 class UserController extends Controller
 {
     protected UserService $userService;
+
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
     }
 
-    /**
-    *   POST api/login 
-    *   the function will process an check if users exist & if it exists it will generate a bearer token 
-    *   and with that the middleware can work through all the routes by authenticating amd then displaying the results 
-    */
-   public function login(UserRequest $request)
+    // Login user and issue token
+    public function login(UserRequest $request)
     {
-        
-        Log::info('Login attempt', [
-            'email' => $request->email,
-            'time' => now()->toDateTimeString(),
-            'ip' => $request->ip(),
-        ]);
+        $data = $request->validated();
 
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',         // Just use 'string', not 'password'
-            'device_name' => 'required|string',      // Just use 'string', not 'device_name'
-        ]);
+        $user = User::where('email', $data['email'])->first();
 
-        $user = User::where('email', $request->email)->first();
-
-        if (! $user || ! Hash::check($request->password, $user->password)) 
+        if (! $user || ! Hash::check($data['password'], $user->password)) 
         {
-            Log::error('Login failed', [
-                'email' => $request->email,
-                'reason' => 'Invalid credentials',
-                'time' => now()->toDateTimeString(),
-                'ip' => $request->ip(   ),
-            ]);
-            return response()->json(['error' => 'The provided credentials are incorrect.'], 401);
+            return response()->json(['error' => 'Invalid credentials'], 401);
         }
 
-        $token = $user->createToken($request->device_name)->plainTextToken;
-        Log::info('Login successful', [
-            'user_id' => $user->id,
-            'email' => $user->email,
-            'time' => now()->toDateTimeString(),
-            'ip' => $request->ip(),
-            'device' => $request->device_name
+        $token = $user->createToken($data['device_name'])->plainTextToken;
+
+        return response()->json([
+            'success' => true,
+            'token'   => $token,
         ]);
-        return response()->json([ 'token' => $token ]);
     }
 
-    /**
-     * Display a listing of the resource.
-     * GET api/users/
-     */
+    // Get all users
     public function index()
     {
-        try
+        try 
         {
             $users = $this->userService->showAllUsers();
-            return response()->json(['success' => true, 'data' => $users], 200);
-        }
-        catch (Exception $e)
+            return UserResource::collection($users)->additional([ 'success' => true]);
+        } 
+        catch (Exception $e) 
         {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to fetch users',
-                'error' => $e->getMessage()
-            ], 401);
+                'error'   => $e->getMessage(),
+            ], 500);
         }
-        
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * POST api/v2/users/
-     */
+    // Create user
     public function store(UserCreateRequest $request)
     {
-        try
+        try 
         {
-            $validated = $request->validate([
-                'username'=>'required|string|max:50',
-                'email'=>'required|string|unique:users,email|max:128',
-                'password'=> 'required|string|min:8',
-            ]);
-            $validated['password'] = Hash::make($validated['password']);
-            $user = $this->userService->createUsers($validated);
-            return response()->json([
-            'success' => true,
-            'data' => $user,
-            'message' => 'User created successfully'
-            ], 201);
-        }
+            $data = $request->validated();
+            $data['password'] = Hash::make($data['password']);
+
+            $user = $this->userService->createUsers($data);
+
+            return new UserResource($user);
+        } 
         catch (Exception $e) 
         {
-            Log::error('Failed to create user', [
-                'success' => false,
-                'message' => 'Failed to create user',
-                'error' => $e->getMessage()
-            ]);
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create user',
-                'error' => $e->getMessage()
-            ],403);
+                'error'   => $e->getMessage(),
+            ], 500);
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
+    // Show single user
     public function show($id)
     {
         try 
         {
             $user = $this->userService->findUsers($id);
-            if(!$user)
-            {
-                throw new Exception('User not found');
+
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not found',
+                ], 404);
             }
-            return response()->json([
-                'success'=> true,
-                'data'=> $user,
-                ],200);
-        }
-        catch (Exception $e)
+
+            return new UserResource($user);
+        } 
+        catch (Exception $e) 
         {
             return response()->json([
-                'success'=> false,
-                'error'=> $e->getMessage()
-                ], 401);
+                'success' => false,
+                'message' => 'Failed to fetch user',
+                'error'   => $e->getMessage(),
+            ], 500);
         }
     }
 
-    /**
-     * Update the specified user in storage.
-     * PUT/PATCH api/users/{id}
-     */
+    // Update user
     public function update(UserUpdateRequest $request, $id)
     {
         try 
         {
-            $validated = $request->validate([
-                'username' => 'sometimes|string|max:50',
-                'email' => 'sometimes|string|max:128',
-                // Optional password field
-                'password' => 'sometimes|string|min:8', 
-            ]);
+            $data = $request->validated();
 
-            // Hash password if present
-            if (isset($validated['password'])) 
+            if (isset($data['password'])) 
             {
-                $validated['password'] = Hash::make($validated['password']);
+                $data['password'] = Hash::make($data['password']);
             }
 
-            // Update user through service
-            $user = $this->userService->updateUsers($id, $validated);
+            $user = $this->userService->updateUsers($id, $data);
 
-            return response()->json([
-                'success' => true,
-                'data' => $user,
-                'message' => 'User updated successfully',
-            ], 200);
+            if (!$user) 
+            {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not found or update failed',
+                ], 404);
+            }
+
+            return new UserResource($user);
         } 
         catch (Exception $e) 
         {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update user',
-                'error' => $e->getMessage()
-            ], 401);
+                'error'   => $e->getMessage(),
+            ], 500);
         }
     }
 
-
-    /**
-     * Remove the specified user from storage.
-     * DELETE api/users/{id}
-     */
+    // Delete user
     public function destroy($id)
     {
         try 
         {
             $deleted = $this->userService->deleteUsers($id);
+
             if (!$deleted) 
             {
                 return response()->json([
                     'success' => false,
                     'message' => 'User not found or already deleted',
-                ], 403);
+                ], 404);
             }
+
             return response()->json([
                 'success' => true,
                 'message' => 'User deleted successfully',
-            ], 200);
+            ]);
         } 
         catch (Exception $e) 
         {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete user',
-                'error' => $e->getMessage()
-            ], 401);
+                'error'   => $e->getMessage(),
+            ], 500);
         }
     }
 }
-
 ?>

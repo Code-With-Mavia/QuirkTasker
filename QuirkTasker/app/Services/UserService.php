@@ -1,49 +1,50 @@
 <?php
+
 namespace App\Services;
 
-use Illuminate\Support\Facades\Log;
 use App\Interfaces\UserRepositoryInterface;
+use Illuminate\Support\Facades\Log;
 use Exception;
 
 class UserService
 {
     protected UserRepositoryInterface $users;
+
     public function __construct(UserRepositoryInterface $users)
     {
         $this->users = $users;
     }
 
-    // Show all users
+    // Fetch all users
     public function showAllUsers()
     {
-        try 
-        {
+        try {
             Log::info('Fetching all users');
             $result = $this->users->showAllUsers();
-            
             Log::debug('Fetched users count', ['count' => count($result)]);
             return $result;
-        } 
-        catch (Exception $e) 
-        {
+        } catch (Exception $e) {
             Log::error('Failed to fetch all users', ['exception' => $e->getMessage()]);
             throw $e;
         }
     }
 
-    // Find single user
+    // Find single user by ID
     public function findUsers($id)
     {
-        try 
-        {
-            Log::info('Finding user', ['user_id' => $id]);
-            $result = $this->users->findUsers($id);
-            Log::debug('User fetched', ['data' => $result]);
-            return $result;
-        } 
-        catch (Exception $e) 
-        {
-            Log::error('Failed to find user', ['user_id' => $id, 'exception' => $e->getMessage()]);
+        try {
+            Log::info('Fetching user', ['user_id' => $id]);
+            $user = $this->users->findUsers($id);
+
+            if (!$user) {
+                Log::warning('User not found', ['user_id' => $id]);
+                return null;
+            }
+
+            Log::debug('User fetched successfully', ['user_id' => $id]);
+            return $user;
+        } catch (Exception $e) {
+            Log::error('Error fetching user', ['user_id' => $id, 'exception' => $e->getMessage()]);
             throw $e;
         }
     }
@@ -51,25 +52,14 @@ class UserService
     // Create new user
     public function createUsers(array $data)
     {
-        Log::info('Service: Attempting to create user', ['data' => $data]);
         try {
-            $result = $this->users->createUsers($data);
-            if ($result) 
-            {
-                Log::notice('Service: User created', ['user_id' => $result->id]);
-            } 
-            else 
-            {
-                Log::warning('Service: User creation returned unsuccessfull', ['data' => $data]);
-            }
-            return $result;
-        } 
-        catch (Exception $e) 
-        {
-            Log::error('Service: Exception during user create', [
-                'data' => $data,
-                'exception' => $e->getMessage()
-            ]);
+            Log::info('Creating new user', ['data' => $data]);
+            $user = $this->users->createUsers($data);
+
+            Log::debug('User created successfully', ['user_id' => $user->id]);
+            return $user;
+        } catch (Exception $e) {
+            Log::error('Error creating user', ['data' => $data, 'exception' => $e->getMessage()]);
             throw $e;
         }
     }
@@ -77,16 +67,19 @@ class UserService
     // Update user
     public function updateUsers($id, array $data)
     {
-        try 
-        {
+        try {
             Log::info('Updating user', ['user_id' => $id, 'data' => $data]);
-            $result = $this->users->updateUsers($id, $data);
-            Log::notice('User updated', ['user_id' => $id, 'result' => $result]);
-            return $result;
-        } 
-        catch (Exception $e) 
-        {
-            Log::error('Failed to update user', ['user_id' => $id, 'data' => $data, 'exception' => $e->getMessage()]);
+            $updated = $this->users->updateUsers($id, $data);
+
+            if (!$updated) {
+                Log::warning('Update failed - user not found', ['user_id' => $id]);
+                return null;
+            }
+
+            Log::debug('User updated successfully', ['user_id' => $id]);
+            return $updated;
+        } catch (Exception $e) {
+            Log::error('Error updating user', ['user_id' => $id, 'exception' => $e->getMessage()]);
             throw $e;
         }
     }
@@ -94,18 +87,22 @@ class UserService
     // Delete user
     public function deleteUsers($id)
     {
-        try 
-        {
+        try {
             Log::info('Deleting user', ['user_id' => $id]);
-            $result = $this->users->deleteUsers($id);
-            Log::notice('User deleted', ['user_id' => $id, 'result' => $result]);
-            return $result;
-        } 
-        catch (Exception $e) 
-        {
-            Log::error('Failed to delete user', ['user_id' => $id, 'exception' => $e->getMessage()]);
+            $deleted = $this->users->deleteUsers($id);
+
+            if (!$deleted) {
+                Log::warning('User not found or already deleted', ['user_id' => $id]);
+                return false;
+            }
+
+            Log::debug('User deleted successfully', ['user_id' => $id]);
+            return true;
+        } catch (Exception $e) {
+            Log::error('Error deleting user', ['user_id' => $id, 'exception' => $e->getMessage()]);
             throw $e;
         }
     }
 }
+
 ?>

@@ -3,7 +3,7 @@ namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Interfaces\Services\TaskService;
+use App\Services\TaskService;
 use Illuminate\Validation\ValidationException;
 use Exception;
 

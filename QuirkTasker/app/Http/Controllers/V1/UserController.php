@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\UserCreateRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Services\UserService;
 use Illuminate\Support\Facades\Hash;
 use Exception;
@@ -42,17 +43,12 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      * POST v1/api/users/
      */
-    public function store(Request $request)
+    public function store(UserCreateRequest $request)
     {
         try
         {
-            $validated = $request->validate([
-                'username'=>'required|string|max:50',
-                'email'=>'required|string|unique:users,email|max:128',
-                'password'=> 'required|string|min:8',
-            ]);
-            $validated['password'] = Hash::make($validated['password']);
-            $user = $this->userService->createUsers($validated);
+            $validated['password'] = Hash::make($request->validated(['password']));
+            $user = $this->userService->createUsers($request->validated());
             return response()->json([
             'success' => true,
             'data' => $user,
@@ -97,25 +93,19 @@ class UserController extends Controller
      * Update the specified user in storage.
      * PUT/PATCH api/users/{id}
      */
-    public function update(Request $request, $id)
+    public function update(UserUpdateRequest $request, $id)
     {
         try 
         {
-            $validated = $request->validate([
-                'username' => 'sometimes|string|max:50',
-                'email' => 'sometimes|string|max:128',
-                // Optional password field
-                'password' => 'sometimes|string|min:8', 
-            ]);
 
             // Hash password if present
             if (isset($validated['password'])) 
             {
-                $validated['password'] = Hash::make($validated['password']);
+                $validated['password'] = Hash::make($request->validated(['password']));
             }
 
             // Update user through service
-            $user = $this->userService->updateUsers($id, $validated);
+            $user = $this->userService->updateUsers($id, $request->validated());
 
             return response()->json([
                 'success' => true,
