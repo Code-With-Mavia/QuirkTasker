@@ -17,9 +17,9 @@ class ActivityLogger extends Model
         'action',
     ];
 
-    public $timestamps = false; 
+    public $timestamps = true; 
     const CREATED_AT = 'created_at';
-    const UPDATED_AT = null;
+    const UPDATED_AT = true;
 
     // An Activity Log belongs to a User
     public function user()

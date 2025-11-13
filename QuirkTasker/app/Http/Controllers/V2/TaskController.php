@@ -47,8 +47,7 @@ class TaskController extends Controller
         try 
         {
             $task = $this->taskService->createTasks($request->validated());
-            return (new TaskResource($task))
-                ->additional(['success' => true, 'message' => 'Task created successfully']);
+            return (new TaskResource($task))->additional(['success' => true, 'message' => 'Task created successfully']);
         } 
         catch (Exception $e) 
         {

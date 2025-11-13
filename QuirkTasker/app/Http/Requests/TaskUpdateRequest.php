@@ -23,7 +23,7 @@ class TaskUpdateRequest extends FormRequest
     {
         return [
             'title' => 'sometimes|string|max:255',
-            'status' => 'sometimes|in:completed,pending',
+            'status' => 'sometimes|in:completed,in_progress,pending',
             'priority' => 'sometimes|in:high,medium,low',
             'due' => 'sometimes|date',
             'user_id' => 'sometimes|integer|exists:users,id'

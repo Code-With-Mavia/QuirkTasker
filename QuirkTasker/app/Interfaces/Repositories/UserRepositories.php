@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Interfaces\Repositories;
-Use Exception;
 use App\Models\User;
 use App\Interfaces\UserRepositoryInterface;
 
@@ -9,64 +8,28 @@ class UserRepositories implements UserRepositoryInterface
 {
     public function showAllUsers()
     {
-        try
-        {
-            return User::withCount('tasks')->paginate(50);;
-        }
-        catch(Exception $e)
-        {
-            throw $e;
-        }
+        return User::withCount('tasks')->paginate(50);
     }
 
     public function findUsers($id)
     {
-        try
-        {
-            return User::findOrFail($id);
-        }
-        catch(Exception $e)
-        {
-            throw $e;
-        }
+        return User::findOrFail($id);
     }
 
     public function createUsers(array $data)
     {
-        try
-        {
-            return User::create($data);
-        }
-        catch(Exception $e)
-        {
-            throw $e;
-        }
+        return User::create($data);
     }
 
     public function updateUsers($id, array $data)
     {
-        try
-        {
-            $user = User::findOrFail($id);
-            $user->update($data);
-            return $user;
-        }
-        catch(Exception $e)
-        {
-            throw $e;
-        }
+        $user = User::findOrFail($id);
+        return $user->update($data);       
     }
 
     public function deleteUsers($id)
     {
-        try
-        {
-            return User::destroy($id);
-        }
-        catch(Exception $e)
-        {
-            throw $e;
-        }
+        return User::destroy($id);  
     }
 }
 ?>
