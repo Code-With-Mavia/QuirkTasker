@@ -24,11 +24,11 @@ class TaskController extends Controller
      */
     public function index()
     {
-        try 
+        try
         {
             $tasks = $this->taskService->showAllTasks();
             return TaskResource::collection($tasks)->additional(['success' => true]);
-        } 
+        }
         catch (Exception $e) {
             return response()->json([
                 'success' => false,
@@ -44,12 +44,12 @@ class TaskController extends Controller
      */
     public function store(TaskStoreRequest $request)
     {
-        try 
+        try
         {
             $task = $this->taskService->createTasks($request->validated());
             return (new TaskResource($task))->additional(['success' => true, 'message' => 'Task created successfully']);
-        } 
-        catch (Exception $e) 
+        }
+        catch (Exception $e)
         {
             return response()->json([
                 'success' => false,
@@ -65,11 +65,11 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        try 
+        try
         {
             $task = $this->taskService->findTasks($id);
 
-            if (!$task) 
+            if (!$task)
             {
                 return response()->json([
                     'success' => false,
@@ -78,8 +78,8 @@ class TaskController extends Controller
             }
 
             return (new TaskResource($task))->additional(['success' => true]);
-        } 
-        catch (Exception $e) 
+        }
+        catch (Exception $e)
         {
             return response()->json([
                 'success' => false,
@@ -95,11 +95,11 @@ class TaskController extends Controller
      */
     public function update(TaskUpdateRequest $request, $id)
     {
-        try 
+        try
         {
             $task = $this->taskService->updateTasks($id, $request->validated());
 
-            if (!$task) 
+            if (!$task)
             {
                 return response()->json([
                     'success' => false,
@@ -108,8 +108,8 @@ class TaskController extends Controller
             }
 
             return (new TaskResource($task))->additional(['success' => true, 'message' => 'Task updated successfully']);
-        } 
-        catch (Exception $e) 
+        }
+        catch (Exception $e)
         {
             return response()->json([
                 'success' => false,
@@ -125,7 +125,7 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        try 
+        try
         {
             $deleted = $this->taskService->deleteTasks($id);
             if (!$deleted) {
@@ -140,8 +140,8 @@ class TaskController extends Controller
                 'message' => 'Task deleted successfully',
             ], 200);
 
-        } 
-        catch (Exception $e) 
+        }
+        catch (Exception $e)
         {
             return response()->json([
                 'success' => false,
